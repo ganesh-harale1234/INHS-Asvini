@@ -1,0 +1,170 @@
+.mat-table-full-width .mat-header-cell,
+.mat-table-full-width .mat-cell {
+  white-space: nowrap;
+}
+
+.mat-column-serialNum,
+.mat-column-IoStatus,
+.mat-column-fingerPrintCount,
+.mat-column-faceCount,
+.mat-column-transectionCount,
+.mat-column-userCount,
+.mat-column-deviceName,
+.mat-column-offlineSince,
+.mat-column-id,
+.mat-column-ipAddress,
+.mat-column-area,
+.mat-column-srNo,
+.mat-column-lastActivity {
+  white-space: nowrap;
+}
+
+.mat-column-serialNum,
+.mat-column-fingerPrintCount {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.border-sky-5000{
+  border: 1px solid rgb(19, 22, 190) !important;
+}
+
+.online{
+  color: green !important;
+}
+.offline{
+  color: rgb(250, 22, 22) !important;
+}
+
+.in{
+  color: green !important;
+}
+.input{
+  color: blue($color: #fd0a0a);
+}.dashboard-card{
+    background:#fff !important;
+    border:1px solid #E6EEF5 !important;
+    border-radius:12px !important;
+    box-shadow:0 2px 8px rgba(15,23,42,.05) !important;
+    transition:.25s ease;
+}
+
+.dashboard-card:hover{
+    box-shadow:0 8px 20px rgba(15,23,42,.08) !important;
+    transform:translateY(-2px);
+}
+
+.card-body{
+    padding:20px;
+    height:105px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+}
+
+.card-title{
+    font-size:18px;
+    font-weight:500;
+    color:#1E5676;
+    margin:0;
+}
+
+.card-subtitle{
+    font-size:11px;
+color: #041e4b;
+    margin-top:2px;
+}
+
+.card-count{
+    font-size:40px;
+    font-weight:400;
+    color:#154C79;
+    line-height:1;
+    margin:0;
+}
+
+th{
+    background-color: rgba(0, 150, 225, 1) !important;
+    color: white !important;
+}
+
+.mat-column-id,
+.mat-mdc-column-id {
+  justify-content: center !important;
+  text-align: center !important;
+}
+
+.mat-mdc-header-cell.mat-column-id,
+.mat-mdc-cell.mat-column-id {
+  justify-content: center !important;
+  text-align: center !important;
+}
+
+/* Center all header cells */
+.mat-mdc-header-cell {
+  justify-content: center !important;
+  text-align: center !important;
+}
+
+/* Center all body cells */
+.mat-mdc-cell {
+  justify-content: center !important;
+  text-align: center !important;
+}
+
+/* Individual columns */
+.mat-column-serialNum,
+.mat-column-deviceName,
+.mat-column-ipAddress,
+.mat-column-IoStatus,
+.mat-column-status,
+.mat-column-lastActivity,
+.mat-column-userCount,
+.mat-column-fingerPrintCount,
+.mat-column-faceCount,
+.mat-column-transectionCount,
+.mat-column-offlineSince {
+  justify-content: center !important;
+  text-align: center !important;
+}
+
+/* For MDC Angular Material (v15+) */
+.mat-mdc-header-cell.mat-column-serialNum,
+.mat-mdc-header-cell.mat-column-deviceName,
+.mat-mdc-header-cell.mat-column-ipAddress,
+.mat-mdc-header-cell.mat-column-IoStatus,
+.mat-mdc-header-cell.mat-column-status,
+.mat-mdc-header-cell.mat-column-lastActivity,
+.mat-mdc-header-cell.mat-column-userCount,
+.mat-mdc-header-cell.mat-column-fingerPrintCount,
+.mat-mdc-header-cell.mat-column-faceCount,
+.mat-mdc-header-cell.mat-column-transectionCount,
+.mat-mdc-header-cell.mat-column-offlineSince,
+
+.mat-mdc-cell.mat-column-serialNum,
+.mat-mdc-cell.mat-column-deviceName,
+.mat-mdc-cell.mat-column-ipAddress,
+.mat-mdc-cell.mat-column-IoStatus,
+.mat-mdc-cell.mat-column-status,
+.mat-mdc-cell.mat-column-lastActivity,
+.mat-mdc-cell.mat-column-userCount,
+.mat-mdc-cell.mat-column-fingerPrintCount,
+.mat-mdc-cell.mat-column-faceCount,
+.mat-mdc-cell.mat-column-transectionCount,
+.mat-mdc-cell.mat-column-offlineSince {
+  justify-content: center !important;
+  text-align: center !important;
+}
+
+.serial-content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.serial-content img {
+  width: 16px;
+  height: 16px;
+}

@@ -1,0 +1,182 @@
+<div class="p-6 bg-gray-50 min-h-screen font-sans">
+  
+  <!-- TOP HEADER & LEGENDS AREA -->
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+    <!-- Title -->
+    <h1 class="text-2xl font-bold text-slate-800">Real time Dashboard</h1>
+    
+    <!-- Legends (Top Center/Right) -->
+    <div class="flex flex-wrap items-center gap-6 text-sm font-medium text-gray-600">
+      <div class="flex items-center gap-2">
+        <span class="w-3.5 h-3.5 bg-green-500 rounded-full inline-block"></span>
+        <span>Valid Punch IN</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="w-3.5 h-3.5 bg-blue-500 rounded-full inline-block"></span>
+        <span>Valid Punch OUT</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="w-3.5 h-3.5 bg-red-600 rounded-full inline-block"></span>
+        <span>Invalid Response</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT GRID (Left: Logs Tables | Right: KPI Cards & Toggles) -->
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+    
+    <!-- LEFT SIDE: TABLES (Takes 3 columns out of 4) -->
+    <div class="lg:col-span-3 flex flex-col gap-6">
+      
+      <!-- 1. Today's Punching Logs Card -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+        <!-- Card Header -->
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-semibold text-slate-700">Today's Punching Logs</h2>
+          <!-- Search Bar -->
+          <div class="relative flex items-center bg-gray-50 border border-gray-200 rounded-full px-3 py-1.5 w-64 focus-within:border-blue-400 transition">
+            <mat-icon class="text-gray-400 text-sm mr-2">search</mat-icon>
+            <input class="bg-transparent border-0 outline-none text-xs w-full text-gray-700 placeholder-gray-400" placeholder="Search here..."/>
+          </div>
+        </div>
+        
+        <!-- Table -->
+        <div class="max-h-64 overflow-y-auto rounded-lg border border-gray-100">
+          <table class="w-full text-sm text-left">
+            <thead class="bg-sky-600 text-white sticky top-0 z-10">
+              <tr>
+                <th class="py-2.5 px-4 font-medium">ID</th>
+                <th class="py-2.5 px-4 font-medium">Name</th>
+                <th class="py-2.5 px-4 font-medium">Date & Time</th>
+                <th class="py-2.5 px-4 font-medium">Device Name</th>
+                <th class="py-2.5 px-4 text-center font-medium">IN/OUT</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of punchingLogs" class="border-b hover:bg-gray-50 transition" [ngClass]="row.color">
+                <td class="py-2.5 px-4 text-gray-600">{{ row.id }}</td>
+                <td class="py-2.5 px-4 font-medium text-gray-800">{{ row.name }}</td>
+                <td class="py-2.5 px-4 text-gray-600">{{ row.time }}</td>
+                <td class="py-2.5 px-4 text-gray-600">{{ row.zone }}</td>
+                <td class="py-2.5 px-4 flex justify-center">
+                  <span class="w-7 h-7 flex items-center justify-center rounded-full text-xs font-bold text-white shadow-sm"
+                        [ngClass]="{'bg-green-500': row.status=='IN', 'bg-blue-500': row.status=='OUT'}">
+                    {{ row.status }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 2. Today's Alarm Logs Card -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+        <!-- Card Header -->
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-semibold text-slate-700">Today's Alarm Logs</h2>
+          <!-- Search Bar -->
+          <div class="relative flex items-center bg-gray-50 border border-gray-200 rounded-full px-3 py-1.5 w-64 focus-within:border-blue-400 transition">
+            <mat-icon class="text-gray-400 text-sm mr-2">search</mat-icon>
+            <input class="bg-transparent border-0 outline-none text-xs w-full text-gray-700 placeholder-gray-400" placeholder="Search here..."/>
+          </div>
+        </div>
+        
+        <!-- Table -->
+        <div class="max-h-64 overflow-y-auto rounded-lg border border-gray-100">
+          <table class="w-full text-sm text-left">
+            <thead class="bg-sky-600 text-white sticky top-0 z-10">
+              <tr>
+                <th class="py-2.5 px-4 font-medium">ID</th>
+                <th class="py-2.5 px-4 font-medium">Name</th>
+                <th class="py-2.5 px-4 font-medium">Device Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let log of alarmLogs" class="border-b hover:bg-gray-50 transition" [ngClass]="log.color">
+                <td class="py-2.5 px-4 text-gray-600">{{ log.id }}</td>
+                <td class="py-2.5 px-4 font-medium text-gray-800">{{ log.name }}</td>
+                <td class="py-2.5 px-4 text-gray-600">{{ log.details }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT SIDE: TOGGLES & STAT CARDS (Takes 1 column) -->
+    <div class="lg:col-span-1 flex flex-col gap-4">
+      
+      <!-- Toggles Panel -->
+      <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex flex-col gap-3">
+        <!-- Analytics Toggle -->
+        <div class="flex items-center justify-between text-sm font-semibold text-slate-700">
+          <span>Analytics Dashboard</span>
+          <div class="w-11 h-6 rounded-full flex items-center p-0.5 cursor-pointer transition-all duration-300 bg-blue-600"
+               (click)="toggleDashboard()">
+            <div class="w-5 h-5 bg-white rounded-full shadow-md transform transition-all duration-300 translate-x-5"></div>
+          </div>
+        </div>
+
+        <!-- Realtime Toggle -->
+        <div class="flex items-center justify-between text-sm font-semibold text-slate-400">
+          <span>Real time Dashboard</span>
+          <div class="w-11 h-6 rounded-full flex items-center p-0.5 cursor-pointer transition-all duration-300 bg-gray-200"
+               (click)="toggleDashboard()">
+            <div class="w-5 h-5 bg-white rounded-full shadow-md transform transition-all duration-300"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI 1: Today's In Premises -->
+      <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex flex-col items-center justify-center text-center">
+        <span class="text-sm font-bold text-sky-800 mb-2">Today’s In Premises</span>
+        <span class="text-4xl font-extrabold text-slate-800 tracking-tight">2982</span>
+      </div>
+
+      <!-- KPI 2: Today's Alarm Response -->
+      <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex flex-col items-center justify-center text-center">
+        <span class="text-sm font-bold text-sky-800 mb-2">Today’s Alarm Response</span>
+        <span class="text-4xl font-extrabold text-slate-800 tracking-tight">212</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- BOTTOM EXPANDABLE TABLE AREA (Optional Material Table as in code) -->
+  <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm mt-6">
+    <div class="mb-4">
+      <mat-form-field class="w-full max-w-xs">
+        <input matInput type="text" placeholder="Search here..." (input)="filterData($event)">
+      </mat-form-field>
+    </div>
+
+    <table mat-table [dataSource]="dataSource" class="w-full text-sm">
+      <ng-container matColumnDef="SRNO">
+        <th mat-header-cell *matHeaderCellDef class="font-semibold text-slate-700 py-3"> Sr No. </th>
+        <td mat-cell *matCellDef="let element; let i = index" class="py-3"> {{i+1}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef class="font-semibold text-slate-700 py-3"> Name </th>
+        <td mat-cell *matCellDef="let element" class="py-3 font-medium text-gray-800"> {{element.name}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="weight">
+        <th mat-header-cell *matHeaderCellDef class="font-semibold text-slate-700 py-3"> Age </th>
+        <td mat-cell *matCellDef="let element" class="py-3 text-gray-600"> {{element.age}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="symbol">
+        <th mat-header-cell *matHeaderCellDef class="font-semibold text-slate-700 py-3"> Address </th>
+        <td mat-cell *matCellDef="let element" class="py-3 text-gray-600"> {{element.address}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" class="border-b bg-gray-50"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="border-b hover:bg-gray-50/50 transition"></tr>
+    </table>
+  </div>
+
+</div>

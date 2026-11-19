@@ -1,0 +1,269 @@
+<div class="flex items-center justify-between gap-4">
+<div class="">  <h2 class="font-semibold card-titles text-lg"> {{ dataService.title$ | async }} </h2></div>
+
+  <div class=" flex items-center gap-4">
+  <span class="font-semibold card-title ">Analytics Dashboard</span>
+  <!-- TOGGLE -->
+  <div
+    class="w-14 h-7 rounded-full flex items-center p-1 cursor-pointer transition-all"
+    [class.bg-sky-600]="isRealtime"
+    [class.bg-sky-900]="!isRealtime"
+    (click)="toggleDashboard()">
+    <div
+      class="w-5 h-5 bg-white rounded-full shadow-md transform transition-all"
+      [class.translate-x-7]="isRealtime"></div>
+  </div>
+
+  <span class="font-semibold card-title ">Real time  Dashboard</span>
+</div>
+</div>
+
+<!-- DASHBOARD VIEW -->
+<div class="mt-6">
+    <app-dashboard *ngIf="!isRealtime">  </app-dashboard> 
+    
+</div>
+
+
+
+
+
+
+<!-- togggel code end here.................. -->
+
+
+
+
+
+
+
+
+
+<!-- Realtime Dashboard code start.................................................................... -->
+
+
+
+
+<div *ngIf="isRealtime"> 
+
+<div class="">
+  <!-- ==== TOP SUMMARY CARDS ==== -->
+<!-- ==== TOP SUMMARY CARDS & LEGENDS ==== -->
+<div class="mb-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+    
+    <!-- LEFT SIDE: SUMMARY CARDS -->
+    <div class="flex items-center gap-4 w-full">
+      
+      <!-- Today’s In Premises -->
+      <div class="flex-1 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all hover:shadow-md">
+        <div class="text-xs font-semibold card-title uppercase tracking-wider px-4 pt-3">
+          Today’s In Premises
+        </div>
+        <div class="px-4 pb-3 pt-1">
+          <div class="text-2xl font-bold text-[#1d5c8a]">{{totalCountLog}}</div>
+        </div>
+      </div>
+
+      <!-- Today's Alarm Response -->
+      <div class="flex-1 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all hover:shadow-md">
+        <div class="text-xs font-semibold card-title uppercase tracking-wider px-4 pt-3">
+          Today’s Alarm Response
+        </div>
+        <div class="px-4 pb-3 pt-1">
+          <div class="text-2xl font-bold text-[#1d5c8a]">{{totalCountAlarm}}</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT SIDE: LEGENDS -->
+ <div class="w-full flex md:justify-end justify-start items-center">
+  <div class="flex flex-wrap items-center gap-6 py-2">
+    
+    <!-- Valid Punch IN -->
+    <div class="flex items-center gap-2">
+      <div class="w-3.5 h-3.5 bg-green-500 rounded-full shadow-sm"></div>
+      <span class="text-sm font-semibold text-[#1d5c8a]">Valid Punch IN</span>
+    </div>
+
+    <!-- Valid Punch OUT -->
+    <div class="flex items-center gap-2">
+      <div class="w-3.5 h-3.5 bg-[#1698e8] rounded-full shadow-sm"></div>
+      <span class="text-sm font-semibold text-[#1d5c8a]">Valid Punch OUT</span>
+    </div>
+
+    <!-- Invalid Response -->
+    <div class="flex items-center gap-2">
+      <div class="w-3.5 h-3.5 bg-red-600 rounded-full shadow-sm"></div>
+      <span class="text-sm font-semibold text-[#1d5c8a]">Invalid Response</span>
+    </div>
+
+  </div>
+</div>
+  </div>
+</div>
+<div>
+
+  <!-- ==== TODAY'S PUNCHING LOGS ==== -->
+  <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 mb-6">
+    <!-- HEADER ROW -->
+    <div class="flex items-center justify-between mb-4">
+      <div class="text-[#1d5c8a] font-bold text-lg">
+        Today’s Punching Logs
+      </div>
+
+      <!-- SEARCH BAR -->
+      <div class="flex items-center rounded-full border border-gray-300 bg-white px-3 shadow-sm focus-within:border-blue-400 transition" style="height: 36px;">
+        <mat-icon class="text-gray-400 text-lg mr-1 flex items-center justify-center">search</mat-icon>
+        <input
+          class="border-0 outline-none text-gray-700 text-sm w-44 focus:ring-0 p-0"
+          placeholder="Search" (input)="filterDatapunchingLog($event)" />
+      </div>
+    </div>
+
+    <!-- TABLE -->
+     
+    <div class="h-80 overflow-y-auto custom-scrollbar rounded-lg border border-gray-100 overflow-hidden"> 
+      <table class="w-full text-sm text-left border-collapse">
+        <thead class="bg-[rgba(0,150,225,1)] text-white sticky top-0 z-10">
+          <tr>
+            <th class="py-3 px-4 ">ID</th>
+            <th class="py-3 px-4 ">Name</th>
+            <th class="py-3 px-4 ">Date & Time</th>
+            <th class="py-3 px-4 ">Device Name</th>
+          <th class="py-3 px-4 ">Branch Name</th>
+            <th class="py-3 px-4  text-center">IN/OUT</th>
+          </tr>
+        </thead>
+
+        <tbody class="divide-y divide-gray-100 bg-white">
+          <tr *ngFor="let row of pagedPunchingLog" class="hover:bg-gray-50 transition-colors">
+            <td class="py-3 px-4 text-gray-600">{{ row.empId }}</td>
+            <td class="py-3 px-4 text-gray-600 ">{{ row.name }}</td>
+            <td class="py-3 px-4 text-gray-600">{{ row.punchTime | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+            <td class="py-3 px-4 text-gray-600">{{ row.deviceName }}</td>
+                        <td class="py-3 px-4 text-gray-600">{{row.locationName}}</td>
+
+            <td class="py-3 px-4 flex justify-center">
+              <span
+                class="flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold text-white shadow-sm"
+                [ngClass]="{
+                  'bg-green-600': row.ioStatus === 'IN',
+                  'bg-[#1698e8]': row.ioStatus === 'OUT',
+                  'bg-yellow-500': row.ioStatus === 'IN OUT'
+                }">
+                {{row.ioStatus}}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+          <div class="flex justify-between items-center mt-3">
+
+  <span class="text-sm text-gray-600">
+    Showing {{ (currentPage - 1) * pageSize + 1 }} -
+    {{ endRecord }}
+    of {{ filterPunchingLog.length }}
+  </span>
+
+  <div class="flex gap-2">
+    <button
+      (click)="previousPage()"
+      [disabled]="currentPage == 1"
+      class="px-3 py-1 border rounded disabled:opacity-50">
+      Previous
+    </button>
+
+    <span>{{ currentPage }} / {{ totalPages }}</span>
+
+    <button
+      (click)="nextPage()"
+      [disabled]="currentPage == totalPages"
+      class="px-3 py-1 border rounded disabled:opacity-50">
+      Next
+    </button>
+  </div>
+
+</div>
+  </div>
+
+
+  <!-- ==== TODAY'S ALARM LOGS ==== -->
+  <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+    <!-- HEADER ROW -->
+    <div class="flex items-center justify-between mb-4">
+      <div class="text-[#1d5c8a] font-bold text-lg">
+        Today’s Alarm Logs
+      </div>
+
+      <!-- SEARCH BAR -->
+      <div class="flex items-center rounded-full border border-gray-300 bg-white px-3 shadow-sm focus-within:border-blue-400 transition" style="height: 36px;">
+        <mat-icon class="text-gray-400 text-lg mr-1 flex items-center justify-center">search</mat-icon>
+        <input
+          class="border-0 outline-none text-gray-700 text-sm w-44 focus:ring-0 p-0"
+          placeholder="Search" (input)="filterDatAlaram($event)"/>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="h-83 overflow-auto custom-scrollbar rounded-lg border border-gray-100 overflow-hidden">
+      <table class="w-full text-sm text-left border-collapse">
+        <thead class="bg-[rgba(0,150,225,1)] text-white sticky top-0 z-10">
+          <tr>
+            <th class="py-3 px-4 ">ID</th>
+            <th class="py-3 px-4 ">Name</th>
+            <th class="py-3 px-4 ">Device Name</th>
+                      <th class="py-3 px-4 ">Branch Name</th>
+
+          </tr>
+        </thead>
+
+        <tbody class="divide-y divide-gray-100 bg-white">
+          <tr *ngFor="let log of pagedAlarmLogs" class="hover:bg-gray-50 transition-colors" [ngClass]="log.color">
+            <td class="py-3 px-4 text-gray-600">{{ log.id }}</td>
+            <td class="py-3 px-4 text-gray-800 font-medium">{{ log.name }}</td>
+            <td class="py-3 px-4 text-gray-600">{{ log.deviceName }}</td>
+                <td class="py-3 px-4 text-gray-600"> {{log.locationName}} </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flex justify-between items-center mt-3">
+
+  <span class="text-sm text-gray-600">
+    Showing
+    {{ (alarmCurrentPage - 1) * alarmPageSize + 1 }}
+    -
+    {{ alarmEndRecord }}
+    of
+    {{ filteralarmLogs.length }}
+  </span>
+
+  <div class="flex gap-2">
+
+    <button
+      (click)="previousAlarmPage()"
+      [disabled]="alarmCurrentPage == 1"
+      class="px-3 py-1 border rounded disabled:opacity-50">
+      Previous
+    </button>
+
+    <span>{{ alarmCurrentPage }} / {{ alarmTotalPages }}</span>
+
+    <button
+      (click)="nextAlarmPage()"
+      [disabled]="alarmCurrentPage == alarmTotalPages"
+      class="px-3 py-1 border rounded disabled:opacity-50">
+      Next
+    </button>
+
+  </div>
+
+</div>
+  </div>
+
+</div>

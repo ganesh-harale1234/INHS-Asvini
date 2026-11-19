@@ -1,0 +1,443 @@
+  <div class="p-4" *ngIf="showTableData">
+
+<!-- ================= HEADER ================= -->
+<div class="w-full px-4 sm:px-6 lg:px-0">
+
+  <div class="mb-4">
+    <h5 class="text-xl font-semibold text-gray-900">
+      Employee Transfer Status List
+    </h5>
+  </div>
+
+
+  <!-- ================= FILTER SECTION ================= -->
+  <div class="w-full py-3">
+
+    <div
+      class="
+        grid
+        grid-cols-1
+        sm:grid-cols-2
+        lg:grid-cols-12
+        gap-x-4
+        gap-y-3
+        items-end
+        w-full
+      "
+    >
+
+      <!-- ================= SEARCH TYPE ================= -->
+      <div class="w-full lg:col-span-3">
+
+        <label class="block text-sm font-medium text-gray-700 mb-1">
+          Search By
+        </label>
+
+        <select
+          class="
+            w-full
+            h-10
+            px-3
+            border
+            border-sky-500
+            rounded-md
+            bg-white
+            focus:outline-none
+            focus:ring-2
+            focus:ring-sky-500
+            focus:border-sky-500
+          "
+          [(ngModel)]="searchType"
+          (change)="onSearchTypeChange()"
+        >
+
+          <option value="empId">
+            Employee ID
+          </option>
+
+          <option value="empName">
+            Employee Name
+          </option>
+
+          <option value="updatedDate">
+            Transfer Date
+          </option>
+
+          <option value="activity">
+            Activity
+          </option>
+
+          <option value="deviceName">
+            Device Name
+          </option>
+
+          <option value="accessGroup">
+            Access Group Name
+          </option>
+
+          <option value="status">
+            Status
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- ================= SEARCH INPUT ================= -->
+      <div
+        class="w-full lg:col-span-4"
+        *ngIf="
+          searchType !== 'activity' &&
+          searchType !== 'deviceName' &&
+          searchType !== 'status' &&
+          searchType !== 'accessGroup'
+        "
+      >
+
+        <label class="block text-sm font-medium text-gray-700 mb-1">
+          &nbsp;
+        </label>
+
+        <input
+          matInput
+          class="
+            w-full
+            h-10
+            px-3
+            border
+            border-sky-500
+            rounded-md
+            bg-white
+            focus:outline-none
+            focus:ring-2
+            focus:ring-sky-500
+            focus:border-sky-500
+          "
+          [placeholder]="getPlaceholder()"
+          (input)="onSearchInput($event)"
+        />
+
+      </div>
+
+
+      <!-- ================= DROPDOWN FILTER ================= -->
+      <div
+        class="w-full lg:col-span-4"
+        *ngIf="
+          searchType === 'activity' ||
+          searchType === 'deviceName' ||
+          searchType === 'status' ||
+          searchType === 'accessGroup'
+        "
+      >
+
+        <label class="block text-sm font-medium text-gray-700 mb-1">
+          Filter
+        </label>
+
+        <select
+          class="
+            w-full
+            h-10
+            px-3
+            border
+            border-sky-500
+            rounded-md
+            bg-white
+            focus:outline-none
+            focus:ring-2
+            focus:ring-sky-500
+            focus:border-sky-500
+          "
+          [(ngModel)]="selectedValue"
+          (change)="filterDropdown()"
+        >
+
+          <option value="">
+            Select {{ getSelectLabel() }}
+          </option>
+
+          <option
+            *ngFor="let item of dropdownList"
+            [value]="item"
+          >
+            {{ item }}
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- EXTRA SPACE BETWEEN FILTER AND DATE              -->
+      <!-- ================================================= -->
+
+      <div class="hidden lg:block lg:col-span-1"></div>
+
+
+      <!-- ================= FROM DATE ================= -->
+      <div class="w-full lg:col-span-2">
+
+        <mat-form-field
+          appearance="fill"
+          class="w-full custom-field search-field"
+        >
+
+          <mat-label>
+            From
+          </mat-label>
+
+          <input
+            matInput
+            [matDatepicker]="fromPicker"
+            [(ngModel)]="fromDate"
+          />
+
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="fromPicker"
+          >
+          </mat-datepicker-toggle>
+
+          <mat-datepicker
+            #fromPicker
+          >
+          </mat-datepicker>
+
+        </mat-form-field>
+
+      </div>
+
+
+      <!-- ================= TO DATE ================= -->
+      <div class="w-full lg:col-span-2">
+
+        <mat-form-field
+          appearance="fill"
+          class="w-full custom-field search-field"
+        >
+
+          <mat-label>
+            To
+          </mat-label>
+
+          <input
+            matInput
+            [matDatepicker]="toPicker"
+            [(ngModel)]="toDate"
+          />
+
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="toPicker"
+          >
+          </mat-datepicker-toggle>
+
+          <mat-datepicker
+            #toPicker
+          >
+          </mat-datepicker>
+
+        </mat-form-field>
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- BUTTONS - SEPARATE ROW                            -->
+      <!-- ================================================= -->
+
+      <div
+        class="
+          col-span-1
+          sm:col-span-2
+          lg:col-span-12
+          flex
+          justify-end
+          items-center
+          gap-2
+          mt-0
+        "
+      >
+
+        <button
+          type="button"
+          (click)="AuditReport()"
+          class="
+            bg-[#005177]
+            hover:bg-[#003e5c]
+            text-white
+            px-4
+            py-2
+            rounded-md
+            whitespace-nowrap
+          "
+        >
+          View Data
+        </button>
+
+
+        <button
+          type="button"
+          (click)="ExportTOExcel()"
+          class="
+            bg-[#005177]
+            hover:bg-[#003e5c]
+            text-white
+            px-4
+            py-2
+            rounded-md
+            whitespace-nowrap
+          "
+        >
+          Export to Excel
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+
+  <div class="overflow-x-auto" #TABLE>
+      <!-- <div class="max-h-80 overflow-y-auto" #TABLE></div> -->
+    <table
+      mat-table
+      [dataSource]="dataSource"
+      class="min-w-full w-full mat-elevation-z1 mat-table-full-width"
+    >
+
+     <ng-container matColumnDef="id">
+  <th mat-header-cell *matHeaderCellDef class="font-semibold">Sr No.</th>
+  <td mat-cell *matCellDef="let element; let i = index">
+    {{ (paginator.pageIndex * paginator.pageSize) + i + 1 }}
+  </td>
+</ng-container>
+
+
+      <ng-container matColumnDef="serialNum">
+        <th mat-header-cell *matHeaderCellDef class="font-semibold">
+          Biometric ID
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.empId }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="area">
+        <th mat-header-cell *matHeaderCellDef class="font-semibold">
+         Employee Name
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.empName }}
+        </td>
+      </ng-container>
+
+      <!-- Device Name -->
+      <ng-container matColumnDef="deviceName">
+        <th mat-header-cell *matHeaderCellDef class="font-semibold">
+          Device Name
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.deviceName }}
+        </td>
+      </ng-container>
+
+      <!-- Device IP -->
+      <ng-container matColumnDef="ipAddress">
+        <th mat-header-cell *matHeaderCellDef class="font-semibold">
+         Transfer Date
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.updatedDate | date:'dd/MM/yyyy HH:mm'  }}
+        </td>
+      </ng-container>
+
+
+   <ng-container matColumnDef="accessGroupName">
+        <th mat-header-cell *matHeaderCellDef class="font-semibold">
+         Access Group Name
+        </th>
+        <td mat-cell *matCellDef="let element">
+           {{ element.accessGroup }}
+        </td>
+      </ng-container>
+
+
+         <ng-container matColumnDef="activity">
+        <th mat-header-cell *matHeaderCellDef class="font-semibold">
+         Activity 
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.activity}}
+        </td>
+      </ng-container>
+
+        <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef class="font-semibold">
+          Status
+        </th>
+<td mat-cell *matCellDef="let element">
+  <span
+    [ngClass]="element.status == 1 ? 'text-success' : 'text-warning'">
+    {{ element.status == 1 ? 'Success' : 'Pending' }}
+  </span>
+</td>
+      </ng-container>
+
+      <!-- Header & Row -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        class="hover:bg-gray-50"
+      ></tr>
+    </table>
+  </div>
+
+  <!-- Paginator -->
+<mat-paginator
+  [length]="totalItems"
+  [pageIndex]="pageIndex"
+  [pageSize]="pageSize"
+  [pageSizeOptions]="[10,20,30,40,50]"
+  (page)="pageChanged($event)"
+  showFirstLastButtons>
+</mat-paginator>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,478 @@
+<mat-toolbar class="mat-elevation-z8">
+    <div *ngIf="!isLoading" class="flex items-center justify-between w-full">
+        <div>
+            <button mat-icon-button *ngIf="sidenav.mode === 'over'" (click)="sidenav.toggle()">
+                <mat-icon class="text-white" *ngIf="!sidenav.opened"> menu </mat-icon>
+                <mat-icon class="text-white" *ngIf="sidenav.opened"> close </mat-icon>
+            </button>
+
+        </div>
+
+        <span class="imglogo hidden lg:block">
+  <img
+    src="assets/images/image - 2026-07-07T155118.840.png"
+    alt="Logo"
+    class="logoimg mx-auto"
+  >
+</span>
+             <!-- <span class="imglogo"><img src="assets/images/image - 2026-07-07T155118.840.png" alt="Logo" class=" text-center logoimg"></span>        -->
+     <!-- <img src="assets/images/dev-main-logo.png" alt="" height="20" width="280" class="mt-8 mb-8"> -->
+
+        <span class="text-xs md:text-2xl hidden md:block ms-29 name" >Device Management System</span>
+
+        <span class="example-spacer"> 
+  <span *ngIf="roleName === 'Branch Admin'" class="ml-5" style="font-size: 15px;"> <span style="color:black" >Branch Name</span> : <span style="font-size: 18px;">{{locationName}}</span> </span> </span>
+
+        <div *ngIf="!isLoading" class="inline-flex items-center text-md">
+          <div class="flex flex-col leading-5">
+ <!-- <span class="text-sm font-medium text-[rgb(0,84,128)]">
+    Welcome :
+<span class="font-normal text-[rgb(0,84,128)]">
+  {{ userName }}
+</span>  </span> -->
+
+  <span class="text-sm font-semibold text-[rgb(0,84,128)]">
+    Name :
+    <span class="font-normal text-gray-600">{{ userName }}</span>
+  </span> 
+ <span class="text-sm font-semibold text-[rgb(0,84,128)] mt-1">
+    Role :
+    <span class="font-normal text-gray-600">
+        {{ roleName || 'N/A' }}
+    </span>
+  </span> 
+
+
+  
+
+  
+</div>
+            <button mat-button [matMenuTriggerFor]="menu" style="padding-right:0;">
+                
+                <div class=" items-center text-white">
+               
+                    <span class="inline-flex p-1 bg-white rounded-full
+                    text-slate-700 mx-1">
+                      <img src="assets/images/profile.png" alt="" class="w-9 h9 rounded-full" title="Open to logout Model !..">
+                    </span>
+
+                </div>
+
+            </button>
+
+            <mat-menu #menu="matMenu" class="mt-2 w-full" [overlapTrigger]="false" xPosition='before'>
+            <!-- Change Password Button -->
+<!-- Change Password -->
+<div
+  mat-menu-item
+  
+  class="cursor-pointer">
+
+  <mat-icon>lock_reset</mat-icon>
+  <span (click)="openPasswordModal()">Change Password</span>
+
+</div>
+
+
+                <mat-divider></mat-divider>
+                <button mat-menu-item (click)="onSignOut()">
+                    <mat-icon>power_settings_new</mat-icon>
+
+                    <span >Logout</span>
+                </button>
+
+            </mat-menu>
+        </div>
+    </div>
+
+
+
+</mat-toolbar>
+
+
+
+
+
+
+
+
+
+
+
+
+<mat-sidenav-container>
+    <mat-sidenav #sidenav="matSidenav" mode="side" class="mat-elevation-z8 profile custom-sidenav">
+        <!-- <div class="">                    <img src="assets/images/dev-main-logo.png" alt="Logo" class="h-15 mb-4 mt-4 text-center mx-auto ">
+</div> -->
+        <div>
+
+            <button mat-button class="menu-button nav-link" routerLink="dashboard" routerLinkActive="active">
+                <mat-icon>dashboard</mat-icon>
+                <span class="text-sm font-medium">Dashboard</span>
+            </button>
+
+           <!-- <button mat-button class="menu-button nav-link" routerLink="new-dashboard" routerLinkActive="active">
+                <mat-icon>dashboard</mat-icon>
+                <span>Dashboard</span>
+            </button> -->
+            
+          
+
+     <!-- <button mat-button class="menu-button nav-link" routerLink="person-tracking" routerLinkActive="active">
+                <mat-icon>person_search</mat-icon>
+                <span>Person Tracking</span>
+            </button> -->
+
+              <!-- <button mat-button class="menu-button nav-link" routerLink="get-details" routerLinkActive="active">
+              <mat-icon>info</mat-icon>
+                <span>Get Details </span>
+            </button> -->
+
+     <div  *ngIf="roleName === 'Admin'" href="">
+  <mat-accordion>
+            <mat-expansion-panel class="mat-elevation-z-0">
+                <mat-expansion-panel-header>
+
+                    <button mat-button class="menu-button nav-link">
+<mat-icon>folder</mat-icon>               
+         <span class="text-sm font-medium">Masters</span>
+                    </button>
+                </mat-expansion-panel-header>
+  <a mat-button class="menu-button nav-link" routerLink="/add-company" routerLinkActive="active">
+                    <span> Company </span>
+                </a>
+
+                <a mat-button class="menu-button nav-link" routerLink="/add-location" routerLinkActive="active">
+                    <span>  Branch </span>
+                </a>
+
+                  <a mat-button class="menu-button nav-link" routerLink="/add-department" routerLinkActive="active">
+                    <span> Department</span>
+                </a>
+   <a mat-button class="menu-button nav-link" routerLink="/add-category" routerLinkActive="active">
+                    <span> Category</span>
+                </a>
+
+                 <a mat-button class="menu-button nav-link" routerLink="/add-contractor" routerLinkActive="active">
+                    <span>  Contractor</span>
+                </a>
+
+                     <!-- <a mat-button class="menu-button nav-link" routerLink="/add-college" routerLinkActive="active">
+                    <span> Add College</span>
+                </a> -->
+
+                    <a mat-button class="menu-button nav-link" routerLink="/add-designation" routerLinkActive="active">
+                    <span>Designation</span>
+                    </a>
+<!-- 
+                      <a mat-button class="menu-button nav-link" routerLink="/add-working-hours" routerLinkActive="active">
+                    <span> Working Hours</span>
+                    </a> -->
+
+                <a mat-button class="menu-button nav-link" routerLink="/add-group" routerLinkActive="active">
+                    <span>Access Groups</span>
+                </a>
+<!-- 
+                  <a mat-button class="menu-button nav-link" routerLink="/role-master" routerLinkActive="active">
+                    <span>Role Master</span>
+                </a> -->
+                
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+
+       <button mat-button class="menu-button nav-link" routerLink="staff-management" routerLinkActive="active">
+                <mat-icon style="font-size: 18px;">supervisor_account</mat-icon>
+                <span class="text-sm font-medium"> Employee Management</span>
+            </button>
+            <!-- <div href="">
+  <mat-accordion>
+            <mat-expansion-panel class="mat-elevation-z-0">
+                <mat-expansion-panel-header>
+
+                    <button mat-button class="menu-button nav-link">
+<mat-icon>event_available</mat-icon>                    <span>Attendance Management</span>
+                    </button>
+                </mat-expansion-panel-header> -->
+
+           
+<!-- 
+                 <a mat-button class="menu-button nav-link" routerLink="/download-log" routerLinkActive="active">
+                    <span> Download Records </span>
+                </a> -->
+
+                   <!-- <a mat-button class="menu-button nav-link" routerLink="/organization-unit" routerLinkActive="active">
+                    <span> Organization Unit</span>
+                </a> -->
+
+            <!-- </mat-expansion-panel>
+        </mat-accordion>
+    </div> -->
+
+
+
+           <div href="">
+  <!-- <mat-accordion>
+            <mat-expansion-panel class="mat-elevation-z-0">
+                <mat-expansion-panel-header>
+
+                    <button mat-button class="menu-button nav-link">
+                        <mat-icon>settings</mat-icon>
+                        <span>System Settings</span>
+                    </button>
+                </mat-expansion-panel-header> -->
+
+                <!-- <a mat-button class="menu-button nav-link" routerLink="/device-management" routerLinkActive="active">
+                    <span> Device Management </span>
+                </a>
+
+                   <a mat-button class="menu-button nav-link" routerLink="/emp-transfer-data" routerLinkActive="active">
+                    <span> Employee Transfer Status </span>
+                </a> -->
+
+                   <!-- <a mat-button class="menu-button nav-link" routerLink="/authorized-device" routerLinkActive="active">
+                    <span> Authorized Device </span>
+                </a> -->
+<!--                 
+               <a mat-button class="menu-button nav-link"
+   routerLink="/smtp-credential"
+   routerLinkActive="active">
+  <span>SMTP Credentials</span>
+</a> -->
+
+<!-- <a mat-button class="menu-button nav-link"
+   routerLink="/smtp-emailId"
+   routerLinkActive="active">
+  <span>SMTP Email ID</span>
+</a> -->
+
+<!-- 
+            </mat-expansion-panel>
+        </mat-accordion> -->
+
+
+
+
+
+
+         <button
+  mat-button
+  class="menu-button nav-link"
+  routerLink="device-management"
+  routerLinkActive="active">
+
+<span style="display: flex;align-items: center; gap:18; " >
+      <span class="icon">
+    <img class="green-icon mr-2 h-4" src="assets/images/ph_device-mobile-fill.png">
+    <img class="white-icon mr-2 h-4" src="assets/images/Vector (13).png">
+  </span>
+
+  <span class="text-sm font-medium">
+   Device Management
+  </span>
+
+</span>
+</button>
+
+        
+           
+
+                   
+  <button
+  mat-button
+  class="menu-button nav-link"
+  routerLink="emp-transfer-data"
+  routerLinkActive="active">
+
+<span style="display: flex;align-items: center; gap:18; " >
+      <span class="icon">
+    <img class="green-icon mr-2 h-5" src="assets/images/ph_device-mobile-fill (2).png">
+    <img class="white-icon mr-2 h-5" src="assets/images/ph_device-mobile-fill (1).png">
+  </span>
+
+  <span class="text-sm font-medium">
+    Employee Transfer Status
+  </span>
+</span>
+</button>
+
+    </div>
+       <div href="">
+  <mat-accordion>
+            <mat-expansion-panel class="mat-elevation-z-0">
+                <mat-expansion-panel-header>
+
+                    <button mat-button class="menu-button nav-link">
+                                               <mat-icon>description</mat-icon>
+
+                        <span class="text-sm font-medium">Reports</span>
+                    </button>
+                </mat-expansion-panel-header>
+
+                <a mat-button class="menu-button nav-link" routerLink="/attendance-report" routerLinkActive="active">
+                    <span> Attendance Report</span>
+                </a>
+  <a mat-button class="menu-button nav-link" routerLink="/multiple-punches-report" routerLinkActive="active">
+                    <span> Multiple Punches Report </span>
+                </a>
+
+
+                   <a mat-button class="menu-button nav-link" routerLink="/master-report" routerLinkActive="active">
+                    <span>  Master Report </span>
+                </a>
+
+
+                     <a mat-button class="menu-button nav-link" routerLink="/contractor-wise-report" routerLinkActive="active">
+                    <span>  Contractor wise Report </span>
+                </a>
+
+                
+
+                   <!-- <a mat-button class="menu-button nav-link" routerLink="/access-control-report" routerLinkActive="active">
+                    <span> Access Control Report </span>
+                </a> -->
+
+                   <!-- <a mat-button class="menu-button nav-link" routerLink="/access-granted-report" routerLinkActive="active">
+                    <span> Access Granted Report</span>
+                </a> -->
+
+                 
+                   <!-- <a mat-button class="menu-button nav-link" routerLink="/audit-report" routerLinkActive="active">
+                    <span> Audit Report </span>
+                </a> -->
+
+                      <!-- <a mat-button class="menu-button nav-link" routerLink="/entry-exit-status-report" routerLinkActive="active">
+                    <span> Entry Exit Status Report </span>
+                </a> -->
+
+
+               <a style="margin-bottom: 20px;" mat-button class="menu-button nav-link" routerLink="/cumulative-duration-report" routerLinkActive="active">
+                    <span style="font-size: 13px;">Cumulative Duration Report </span>
+                </a>
+
+               <a style="margin-bottom: 20px;" mat-button class="menu-button nav-link" routerLink="/log-report" routerLinkActive="active">
+                    <span> Log Report </span>
+                </a>
+
+                   <!-- <a mat-button class="menu-button nav-link" routerLink="/person-tracking-report" routerLinkActive="active">
+                    <span> Person Tracking Report </span>
+                </a> -->
+                
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+
+            <a mat-button class="menu-button nav-link" routerLink="/help" routerLinkActive="active">
+                <mat-icon>library_books</mat-icon>
+                <span class="text-sm font-medium">Help</span>
+            </a>
+          
+         
+        </div>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <div class="md:mx-2 lg:mx-4">
+            <div class="content">
+                <router-outlet>  </router-outlet>
+              
+            </div>
+
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>
+
+
+<!-- 
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.2)"
+  size="medium"
+  color="#fff"
+  type="ball-scale-multiple"
+  [fullScreen]="true">
+  <p class="text-white text-lg mt-4">Please wait sometime...</p>
+</ngx-spinner> -->
+
+
+<!-- ================= Modal ================= -->
+<div class="password-modal" *ngIf="showChangePasswordModal">
+<form [formGroup]="changePasswordForm" (ngSubmit)="updatePassword()">
+
+    <div class="password-modal-box">
+
+        <div class="modal-title">
+
+            <h3>Change Password</h3>
+
+            <button type="button" class="close-btn" (click)="closeModal()">
+                ✕
+            </button>
+
+        </div>
+
+        
+
+        <!-- Old Password -->
+        <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Old Password</mat-label>
+        <input matInput [type]="showpassword ? 'password' : 'text' " formControlName="oldPassword" placeholder="Enter old your password">
+        <button mat-icon-button matSuffix>
+          <mat-icon (click)="showPassword()" >visibility</mat-icon>
+        </button>
+            <!-- <input
+                matInput
+                type="password"
+                formControlName="oldPassword"> -->
+
+            <mat-error
+                *ngIf="changePasswordForm.get('oldPassword')?.hasError('required')">
+                Old Password is required
+            </mat-error>
+        </mat-form-field>
+
+        <!-- New Password -->
+        <mat-form-field appearance="fill" class="full-width">
+            <mat-label>New Password</mat-label>
+           
+
+                 <input matInput [type]="showpasswordNeW ? 'password' : 'text' " formControlName="password" placeholder="Enter new your password">
+        <button mat-icon-button matSuffix>
+          <mat-icon (click)="showPasswordNew()" >visibility</mat-icon>
+        </button>
+
+            <mat-error
+                *ngIf="changePasswordForm.get('password')?.hasError('required')">
+                New Password is required
+            </mat-error>
+
+            <!-- <mat-error
+                *ngIf="changePasswordForm.get('password')?.hasError('minlength')">
+                Password must be at least 6 characters
+            </mat-error> -->
+        </mat-form-field>
+
+        <div class="modal-footer">
+
+            <button
+                type="button"
+                mat-stroked-button
+                color="warn"
+                (click)="closeModal()">
+                Cancel
+            </button>
+
+            <button
+                type="submit"
+                mat-raised-button
+                color="primary">
+
+                Update Password
+
+            </button>
+
+        </div>
+
+    </div>
+
+</form>
+
+</div>

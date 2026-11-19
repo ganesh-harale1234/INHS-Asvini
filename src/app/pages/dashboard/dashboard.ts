@@ -1,0 +1,103 @@
+import { Component, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { SharedModule } from '../../shared/shared-module';
+import { CommonModule } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
+import { NgxSpinner, NgxSpinnerModule } from 'ngx-spinner';
+import { DataService } from '../../services/data-service';
+import { StatustextPipe } from '../../shared/statustext-pipe';
+import { Router } from '@angular/router';
+import { RealTimeDashboard } from "../real-time-dashboard/real-time-dashboard";
+export interface Device {
+  id: number;
+  serialNum: string;
+  area: string;                 // matches your 'area' field
+  deviceName: string;
+  ipAddress: string;
+  IoStatus: 'Online' | 'Offline';
+  status: 'Active' | 'Inactive';
+  lastActivity: string;         // you can change to Date if you parse it
+  userCount: number;
+  fingerPrintCount: number;
+  faceCount: number;
+  transactionCount: number;
+  offlineSince: string | null;  // null when online / not applicable
+  location?: string;
+}
+
+
+const DEVICE_DATA: any = [
+ 
+];
+@Component({
+  selector: 'app-dashboard',
+  imports: [SharedModule, CommonModule, NgxSpinnerModule,],
+  templateUrl: './dashboard.html',
+  styleUrl: './dashboard.scss',
+})
+
+
+export class Dashboard {
+  
+
+  displayedColumns: string[] = [ 'srNo', 'id', 'serialNum', 'deviceName', 'ipAddress', 'IoStatus', 'status', 'lastActivity', 'userCount', 'fingerPrintCount', 'faceCount', 'transectionCount'];
+
+  dataSource: any = new MatTableDataSource(DEVICE_DATA);
+  dashbordCount:any;
+  RoleName:any;
+locationID:any;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  constructor(private dataService: DataService, private toaster: ToastrService, private router :Router) { }
+
+  ngOnInit(): void {
+      this.dataService.setTitle('Analytics Dashboard');
+        this.locationID = sessionStorage.getItem('locationId');
+    this.RoleName =  sessionStorage.getItem('roleName');
+
+    this.getAllDeviceList();
+    this.getDashbordcount()
+  }
+
+  getAllDeviceList() {
+    let apiUrl = '';
+
+  if (this.RoleName === 'Branch Admin' && this.locationID) {
+    apiUrl = `getAllDeviceInfo?locationId=${this.locationID}`;
+  } else {
+    apiUrl = 'getAllDeviceInfo';
+  }
+
+  this.dataService.getAllData(apiUrl).subscribe((res: any) => {
+         const list = res;
+     this.dataSource.data = list;          
+      this.dataSource.paginator = this.paginator; 
+    })
+  }
+
+
+ getDashbordcount(){
+  let apiUrl = '';
+
+  if (this.RoleName === 'Branch Admin' && this.locationID) {
+    apiUrl = `dashboardTotalSummary?locationId=${this.locationID}`;
+  } else {
+    apiUrl = 'dashboardTotalSummary';
+  }
+
+  this.dataService.getAllData(apiUrl).subscribe((res: any) => {
+   this.dashbordCount = res;
+  })
+ }
+isRealtime: boolean = true;
+
+toggleDashboard() {
+  this.isRealtime = !this.isRealtime;
+  
+  if (this.isRealtime) {
+    this.dataService.setTitle('Real time Dashboard');
+  } else {
+    this.dataService.setTitle('Analytics Dashboard');
+  }
+}
+}

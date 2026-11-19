@@ -1,0 +1,440 @@
+<div class="p-4" *ngIf="showTableData">
+
+<div class="flex flex-wrap items-end justify-between gap-4 mb-4 px-3">
+
+  <!-- Left Side -->
+  <div>
+    <h2 class="text-xl font-semibold">Device Management List</h2>
+  </div>
+
+  <!-- Right Side -->
+  <div class="flex flex-wrap items-end gap-3">
+
+    <!-- Search By -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">
+        Search By
+      </label>
+
+      <select
+        class="w-55 h-10 px-3 border border-sky-500 rounded-md bg-white
+               focus:outline-none focus:ring-2 focus:ring-sky-500"
+        [(ngModel)]="searchType"
+        (change)="onSearchTypeChange()">
+
+        <option value="deviceName">Device Name</option>
+        <option value="serialNum">Serial No</option>
+        <option value="ipAddress">IP Address</option>
+        <option value="locationName">Branch Name</option>
+        <option value="status">Status</option>
+        <option value="ioStatus">IO Status</option>
+      </select>
+    </div>
+
+    <!-- Text Search -->
+    <div *ngIf="searchType!='status' && searchType!='ioStatus'">
+      <label class="block text-sm font-medium text-transparent mb-1">
+        Search
+      </label>
+
+      <input
+        type="text"
+        class="w-55 h-10 px-3 border border-sky-500 rounded-md bg-white
+               focus:outline-none focus:ring-2 focus:ring-sky-500"
+        [placeholder]="getPlaceholder()"
+        (input)="onSearchInput($event)">
+    </div>
+
+    <!-- Dropdown Search -->
+    <div *ngIf="searchType=='status' || searchType=='ioStatus'">
+      <label class="block text-sm font-medium text-transparent mb-1">
+        Select
+      </label>
+
+      <select
+        class="w-55 h-10 px-3 border border-sky-500 rounded-md bg-white
+               focus:outline-none focus:ring-2 focus:ring-sky-500"
+        [(ngModel)]="selectedValue"
+        (change)="filterDropdown()">
+
+        <option value="">Select One</option>
+
+        <option *ngFor="let item of dropdownList" [value]="item">
+          {{ item }}
+        </option>
+
+      </select>
+    </div>
+
+  </div>
+
+</div>
+
+
+
+
+
+  <div class="overflow-x-auto">
+    <table
+      mat-table
+      [dataSource]="dataSource"
+      class="min-w-full w-full  mat-elevation-z1 mat-table-full-width"
+    >
+
+      <ng-container matColumnDef="sr-No">
+  <th mat-header-cell *matHeaderCellDef class="font-semibold">Sr No.</th>
+  <td mat-cell *matCellDef="let element; let i = index">
+   {{ (pageIndex * pageSize) + i + 1 }}
+  </td>
+</ng-container>
+
+      <!-- ID -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef class="font-semibold">ID</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.id }}
+        </td>
+      </ng-container>
+
+      <!-- Serial No -->
+      <ng-container matColumnDef="serialNum">
+        <th mat-header-cell *matHeaderCellDef class="font-semibold">
+          Serial No
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.serialNum }}
+        </td>
+      </ng-container>
+  <!-- Device IP -->
+      <ng-container matColumnDef="ipAddress">
+        <th mat-header-cell *matHeaderCellDef class="font-semibold">
+        IP Address
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.ipAddress }}
+        </td>
+      </ng-container>
+
+      <!-- Device Name -->
+      <ng-container matColumnDef="deviceName">
+        <th mat-header-cell *matHeaderCellDef class="font-semibold">
+          Device Name
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.deviceName }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="location">
+        <th mat-header-cell *matHeaderCellDef class="font-semibold">
+          Branch Name
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.locationName }}
+        </td>
+      </ng-container>
+
+
+      <!-- I/O Status -->
+      <ng-container matColumnDef="IoStatus">
+        <th mat-header-cell *matHeaderCellDef class="font-semibold">
+          I/O Status
+        </th>
+    <td mat-cell *matCellDef="let element">
+        {{ element.ioStatus }}
+  <span class="px-2 py-1 text-xs rounded-full">
+
+    
+    <!-- <ng-container [ngSwitch]="element.ioStatus">
+      <span *ngSwitchCase="'I'">IN</span>
+      <span *ngSwitchCase="'O'">OUT</span>
+      <span *ngSwitchCase="'IO'">IN OUT</span>
+      <span *ngSwitchDefault>-</span>
+    </ng-container> -->
+       <!-- <td mat-cell *matCellDef="let element">
+          {{ element.ioStatus }}
+        </td> -->
+  </span>
+   
+  
+</td>
+      </ng-container>
+
+      <!-- Status -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef class="font-semibold">
+          Status
+        </th>
+        <!-- <td mat-cell *matCellDef="let element">
+         <span
+  class="px-2 py-1 text-sm rounded-md"
+  [ngClass]="{
+    'bg-green-100 text-green-900': element.status === 1 || element.status === '1',
+    'bg-red-100 text-red': element.status === 0 || element.status === '0' || element.status === null
+  }"
+>
+  {{ element.status === 1 || element.status === '1' ? 'Online' : 'Offline' }}
+</span>
+        </td> -->
+
+         <td mat-cell *matCellDef="let element"
+    [ngClass]="{
+      'online': element.status == 1 || element.status == '1',
+      'offline': element.status == 0 || element.status == '0' || element.status == null
+    }">
+
+  {{ (element.status == 1 || element.status == '1') ? 'Online' : 'Offline' }}
+
+</td>
+      </ng-container>
+
+     
+
+      <!-- Edit -->
+        <ng-container matColumnDef="edit">
+          <th mat-header-cell *matHeaderCellDef class="font-semibold sticky top-0 bg-white z-10 action-header">
+            Edit
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <!-- <button
+              mat-icon-button
+              class="text-sky-500">
+              <mat-icon  (click)="editRow()" >edit</mat-icon>
+            </button> -->
+               <div class="action-buttons">
+      <button mat-icon-button class="edit-btn" (click)="editData(row.id)">
+        <mat-icon>edit</mat-icon>
+      </button>
+      </div>
+
+          </td>
+        </ng-container>
+
+      <!-- Header & Row -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+        class="hover:bg-gray-50"
+      ></tr>
+    </table>
+  </div>
+
+  <!-- Paginator -->
+<mat-paginator
+  [length]="totalItems"
+  [pageSize]="10"
+  [pageSizeOptions]="[10,20,30,40,50]"
+  showFirstLastButtons>
+</mat-paginator>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<!-- FORM SECTION -->
+<div class="p-4" *ngIf="showFormData">
+  <div class="flex flex-wrap items-center justify-between rounded-sm gap-4 mb-4 px-3">
+    <h2 class="text-xl font-semibold"> Add Device</h2>
+
+    <div class="flex flex-wrap items-center gap-4 ml-auto">
+       <button
+  type="button"
+  (click)="backtoList()"
+  class="group inline-flex items-center gap-2 rounded-lg border border-blue-200 bg-white px-5 py-2 text-sm font-semibold text-blue-600 shadow-sm transition-all duration-200 hover:border-blue-500 hover:bg-blue-50 hover:text-blue-700 hover:shadow-md active:scale-95"
+>
+  <img
+    src="/assets/images/emojione-monotone_left-arrow.png"
+    alt="Back"
+    class="h-5 w-5 transition-transform duration-200 group-hover:-translate-x-1"
+  />
+  <span>Go Back to List</span>
+</button>
+    </div>
+  </div>
+
+  <div class="p-4 md:p-6 bg-white rounded-lg shadow-sm border border-gray-100 max-w-6xl mx-auto">
+    <form [formGroup]="form" class="space-y-6">
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+     <!-- Device Name -->
+<div>
+  <label class="block text-sm font-medium text-[#004A71] mb-1">
+    Device Name <span class="text-red-500">*</span>
+  </label>
+
+  <input
+    type="text"
+    formControlName="deviceName"
+    placeholder="Enter here..."
+    class="w-full px-3 py-2 border border-sky-500 rounded-md focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500 text-sm"
+  />
+
+  <p
+    class="text-red-500 text-xs mt-1"
+    *ngIf="form.get('deviceName')?.hasError('required') && form.get('deviceName')?.touched"
+  >
+    Device Name is required
+  </p>
+</div>
+
+<!-- I/O Status -->
+<div>
+  <label class="block text-sm font-medium text-[#004A71] mb-1">
+    I/O Status <span class="text-red-500">*</span>
+  </label>
+
+  <select
+    formControlName="ioStatus"
+    class="w-full px-3 py-2 border border-sky-500 rounded-md focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500 text-sm bg-white"
+  >
+    <option value="" disabled selected>Select I/O Status</option>
+    <option value="IN">In</option>
+    <option value="OUT">Out</option>
+    <option value="IN OUT">In Out</option>
+  </select>
+
+  <p
+    class="text-red-500 text-xs mt-1"
+    *ngIf="form.get('ioStatus')?.hasError('required') && form.get('ioStatus')?.touched"
+  >
+    I/O Status is required
+  </p>
+</div>
+
+<!-- Location -->
+<div>
+  <label class="block text-sm font-medium text-[#004A71] mb-1">
+    Location <span class="text-red-500">*</span>
+  </label>
+
+  <select
+    formControlName="locationId"
+    class="w-full px-3 py-2 border border-sky-500 rounded-md focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500 text-sm bg-white"
+  >
+    <option value="" disabled selected>Select Location</option>
+
+    <option *ngFor="let item of getAllListLocation" [value]="item.locationId">
+      {{ item.locationName }}
+    </option>
+  </select>
+
+  <p
+    class="text-red-500 text-xs mt-1"
+    *ngIf="form.get('locationId')?.hasError('required') && form.get('locationId')?.touched"
+  >
+    Location is required
+  </p>
+</div>
+
+<!-- Access Group -->
+<div>
+  <label class="block text-sm font-medium text-[#004A71] mb-1">
+    Select Access Group <span class="text-red-500">*</span>
+  </label>
+
+<select
+  formControlName="accessGroupId"
+  class="w-full px-3 py-2 border border-sky-500 rounded-md">
+
+  <option [ngValue]="null">Select Access Group</option>
+
+  <option
+    *ngFor="let item of getAllListgroup"
+    [ngValue]="item.accessGroupId">
+    {{ item.accessGroupName }}
+  </option>
+
+</select>
+
+<p
+  class="text-red-500 text-xs mt-1"
+  *ngIf="form.get('accessGroupId')?.invalid && form.get('accessGroupId')?.touched">
+  Access Group is required.
+</p>
+
+<div
+  *ngIf="accessGroupError"
+  class="text-red-500 text-sm mt-1">
+  Access Group is required.
+</div>
+  <!-- <p
+    class="text-red-500 text-xs mt-1"
+    *ngIf="form.get('accessGroupId')?.hasError('required') && form.get('accessGroupId')?.touched"
+  >
+    Group is required
+  </p> -->
+</div>
+
+
+<!-- <div class="w-full custom-field">
+  <label class="block mb-2 text-sm font-medium text-gray-700">
+    Authorized Device <span style="color: red;" >*</span>
+  </label>
+
+  <mat-checkbox formControlName="authorizedDevice">
+    Allow this device
+  </mat-checkbox>
+</div> -->
+
+
+              <!-- <mat-error *ngIf="form.get('deviceName')?.hasError('required')">
+         Device Name is required
+        </mat-error> -->
+
+      </div>
+
+<div class="flex items-center justify-start gap-3 pt-4 border-t border-gray-100">
+
+
+  @if (!isEditMode) {
+    <button
+      mat-stroked-button
+      type="submit"
+      (click)="onUpdate()"
+      class="btn-save px-6 py-2 rounded-md font-semibold"
+    >
+      Update
+    </button>
+  }
+
+  @if (isEditMode) {
+    <button
+      mat-stroked-button
+      type="submit"
+      (click)="onUpdate()"
+      class="btn-save px-6 py-2 rounded-md font-semibold"
+    >
+      Update
+    </button>
+  }
+    <button
+    mat-raised-button
+    type="button"
+    class="btn-cancel px-6 py-2 rounded-md"
+    (click)="onCancel()"
+  >
+    Cancel
+  </button>
+</div>
+
+
+    </form>
+  </div>
+</div>
+
+
+
+
+
+
+
