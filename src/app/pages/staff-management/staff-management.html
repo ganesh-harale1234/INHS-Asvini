@@ -1000,6 +1000,38 @@
           </p>
         </div>
 
+        <div>
+          <label class="block text-sm font-medium text-[#004A71] mb-1">Service Number <span class="text-red-500">*</span></label>
+          <input
+            type="text"
+            formControlName="serviceNumber"
+            placeholder="Enter service number"
+            class="w-full px-3 py-2 border border-sky-500 rounded-md focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500 text-sm"
+          />
+   <p class="text-red-500 text-xs mt-1" *ngIf="form.get('serviceNumber')?.hasError('required') && form.get('serviceNumber')?.touched">
+            Service Number is required
+          </p>
+
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-[#004A71] mb-1">Contact Number <span class="text-red-500">*</span></label>
+          <input
+            type="text"
+            formControlName="contactNumber"
+            placeholder="Enter 10-digit contact number"
+            (input)="onlyNum($event)"
+            maxlength="10"
+            class="w-full px-3 py-2 border border-sky-500 rounded-md focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500 text-sm"
+          />
+          <p class="text-red-500 text-xs mt-1" *ngIf="form.get('contactNumber')?.hasError('required') && form.get('contactNumber')?.touched">
+            Contact Number is required
+          </p>
+          <p class="text-red-500 text-xs mt-1" *ngIf="form.get('contactNumber')?.hasError('pattern') && form.get('contactNumber')?.touched">
+            Please enter a valid 10-digit contact number
+          </p>
+        </div>
+
   <div class="" *ngIf="empType === 'contractor'">
           <label class="block text-sm font-medium text-[#004A71] mb-1">Select Contractor <span class="text-red-500">*</span></label>
           <select
@@ -1017,18 +1049,18 @@
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-[#004A71] mb-1">Select Company <span class="text-red-500">*</span></label>
+          <label class="block text-sm font-medium text-[#004A71] mb-1">Select Unit <span class="text-red-500">*</span></label>
           <select
             formControlName="companyName"
             class="w-full px-3 py-2 border border-sky-500 rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500 text-sm h-[38px]"
           >
-            <option value="" disabled selected>Select Company</option>
+            <option value="" disabled selected>Select Unit</option>
             @for (item of getAllListcompany; track $index) {
               <option [value]="item.companyName"> {{item.companyName}} </option>
             }
           </select>
           <p class="text-red-500 text-xs mt-1" *ngIf="form.get('companyName')?.hasError('required') && form.get('companyName')?.touched">
-            Company is required
+            Unit is required
           </p>
         </div>
 
@@ -1201,18 +1233,18 @@
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-[#004A71] mb-1">Select Designation <span class="text-red-500">*</span></label>
+          <label class="block text-sm font-medium text-[#004A71] mb-1">Select Rank <span class="text-red-500">*</span></label>
           <select
             formControlName="desigId"
             class="w-full px-3 py-2 border border-sky-500 rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500 text-sm h-[38px]"
           >
-            <option value="" disabled selected>Select Designation</option>
+            <option value="" disabled selected>Select Rank</option>
             @for (item of getAllListDigination; track $index) {
               <option [value]="item.desigId"> {{item.desigName}} </option>
             }
           </select>
           <p class="text-red-500 text-xs mt-1" *ngIf="form.get('desigId')?.hasError('required') && form.get('desigId')?.touched">
-            Designation is required
+            Rank is required
           </p>
         </div>
 

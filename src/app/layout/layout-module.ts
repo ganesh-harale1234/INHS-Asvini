@@ -82,7 +82,7 @@ export const routes: Routes = [
         , canActivate:[authGuard]
       },
         {
-        path:'add-designation',
+        path:'add-rank',
         loadComponent:()=> import('../pages/master/designation/designation').then((m)=> m.Designation)
         , canActivate:[authGuard]
       },
@@ -92,9 +92,9 @@ export const routes: Routes = [
         // ,canActivate:[authGuard]
       },
 
-
+      
        {
-        path:'add-company',
+        path:'add-unit',
         loadComponent:()=> import('../pages/master/add-company/add-company').then((m)=> m.AddCompany)
         , canActivate:[authGuard]
       },

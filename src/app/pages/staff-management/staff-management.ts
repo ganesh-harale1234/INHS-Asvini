@@ -167,6 +167,8 @@ selectedDeviceIds: string[] = [];
        this.form = this.fb.group({
       empId: ['', Validators.required],
       name: ['', Validators.required],
+      serviceNumber: ['', Validators.required],
+      contactNumber: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
       userId: ['', Validators.required],
       // password:['', Validators.required],
       cardNum:['', ],
@@ -1032,6 +1034,8 @@ console.log(ids); // [1,2,1011]
               userId: empData.userId,
               deptId: empData.deptId,
               name: empData.name,
+              serviceNumber: empData.serviceNumber ?? '',
+              contactNumber: empData.contactNumber ?? '',
               companyName: empData.companyName,
               rollId: empData.rollId,
               categoryId: empData.categoryId,

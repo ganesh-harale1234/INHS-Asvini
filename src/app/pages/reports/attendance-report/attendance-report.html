@@ -115,7 +115,7 @@
       type="button"
   class="bg-[#005177] hover:bg-[#003e5c] text-white  text-sm font-medium py-2 px-2 rounded-lg normal-case shadow-md transition-all duration-200 flex items-center justify-center export-btn"
 
-      (click)="viewReportDetails()"
+      (click)="AttendencesReport()"
     >
       View Report
     </button>
@@ -193,9 +193,12 @@
         <th>Sr No.</th>
         <th>Employee Id</th>
         <th>Employee Name</th>
+        <th>Service Number</th>
         <th>Attendance Date</th>
-        <th>Punch In</th>
-        <th>Punch Out</th>
+        <th>Attendance Time</th>
+
+        <!-- <th>Punch In</th>
+        <th>Punch Out</th> -->
       </tr>
 
     </thead>
@@ -207,9 +210,10 @@
         <td>{{i+1}}</td>
         <td>{{row.employeeId}}</td>
         <td>{{row.employeeName}}</td>
+        <td>  {{row.serviceNumber}} </td>
         <td>{{row.attendanceDate | date:'dd-MM-yyyy'}}</td>
-        <td>{{row.punchIn?.slice(0, 5)}}</td>
-        <td>{{row.punchOut?.slice(0, 5)}}</td>
+        <td>{{row.punchIn?.slice(0, 5 ) }}</td>
+        <!-- <td>{{row.punchOut?.slice(0, 5)}}</td> -->
 
       </tr>
 
