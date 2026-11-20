@@ -1264,7 +1264,7 @@
 
         <div *ngIf="isEditMode">
   <label class="block text-sm font-medium text-[#004A71] mb-1">
-    Select Access Group <span class="text-red-500">*</span>
+    Select Access Group <span class="text-red-500"></span>
   </label>
 
   <!-- <ng-select
@@ -1321,8 +1321,6 @@
     [searchable]="false"
     [closeOnSelect]="false"
     [clearable]="false"
-    (change)="onAccessGroupChangeS($event)"
-    
     [ngClass]="{'readonly-ng-select': isEditMode}">
 
     <ng-template
@@ -1340,9 +1338,6 @@
     </ng-template>
 
 </ng-select>
- <span *ngIf="isAccessGroupError">    <p class="text-red-500 text-xs mt-1">
-          Access Group is required
-          </p> </span>
 
 </div>
 

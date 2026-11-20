@@ -1081,24 +1081,9 @@ console.log(ids); // [1,2,1011]
   }
 }
 
-isAccessGroupError = false;
-
-onAccessGroupChangeS(event: any) {
-  if (event && event.length > 0) {
-    this.isAccessGroupError = false;
-  }
-}
-
 onUpdate() {
 
   const accessGroup = this.form.get('accessGroupId')?.value;
-
-  if (!accessGroup || accessGroup.length === 0) {
-    this.isAccessGroupError = true;
-    return;
-  }
-
-  this.isAccessGroupError = false;
 
   if (this.form.valid) {
 
@@ -1108,7 +1093,7 @@ onUpdate() {
       enrollId: this.empId,
       ...formValues,
       empType: this.empType,
-      accessGroupId: accessGroup.join(','),
+      accessGroupId: Array.isArray(accessGroup) ? accessGroup.join(',') : '',
       imagePath: this.imagePath
     };
 
